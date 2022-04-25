@@ -1,0 +1,70 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab5"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Logistic Regression
+<hr/>
+### Setting the working directory, importing library needed and reading the dataset
+
+```{r}
+rm(list=ls())
+library(caret)
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab5")
+
+mydata <- read.csv("admission.csv")#file.choose(),header=T)
+str(mydata)
+head(mydata)
+summary(mydata)
+```
+### Plotting a histogram
+```{r}
+hist(mydata$admit,col="blue")
+```
+<br>
+
+### Transform the admit column into a factor
+```{r}
+mydata$admit<-as.factor(mydata$admit)
+summary(mydata)
+```
+### Creating the train-test data sets
+```{r}
+#partitioning and training
+train_ind=createDataPartition(mydata$admit,p=0.80,list=F)
+train_ds=mydata[train_ind,]
+test_ds=mydata[-train_ind,]
+```
+### Constructing the logistic regression model
+```{r}
+my_model=glm(admit~.,data=train_ds,family="binomial") #admit~. means admit is 'y' and all other attributes are the 'x' attributes
+summary(my_model)
+```
+### Predicting with training data
+```{r}
+#testing on train data
+pred_train=predict(my_model,train_ds,type="response")
+pred_train
+pred_train=ifelse(pred_train>0.5,1,0)
+tab1<-table(Predicted=pred_train,Actual=train_ds$admit)
+tab1 #this is the confusion matrix
+1-sum(diag(tab1))/sum(tab1) # misclassification error
+```
+### Predicting with testing data
+```{r}
+#testing on testing data
+pred_test<-predict(my_model,test_ds,type='response')
+pred_test
+pred_test<-ifelse(pred_test>0.5,1,0)
+tab2<-table(Predicted=pred_test,Actual=test_ds$admit)
+tab2
+1-sum(diag(tab2))/sum(tab2)
+```

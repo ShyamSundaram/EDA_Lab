@@ -1,0 +1,60 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab7"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## K-Medoids Clustering
+<hr/>
+### Setting the working directory and importing library needed
+
+```{r}
+rm(list=ls())
+
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab7")
+
+library(factoextra)
+library(cluster)
+```
+### Load and scale data
+```{r}
+df <- read.csv("autos_K-Means.csv")
+df<-na.omit(df)
+df<-df[,c("length","price")]
+df<-scale(df) #this is to normalize the values in data because the range of values is not distributed evenly
+head(df)
+```
+### Determine the optimal number of K
+```{r}
+fviz_nbclust(df,pam,method="wss") #we see that after scaling, we get a bend at k=4 so that is the optimal number of clusters
+```
+<br>
+
+### Perform K-Medoids clustering
+```{r}
+set.seed(1) #to reproduce same results always
+km <- pam(df,k = 4)
+
+km
+```
+### View the clusters formed with k-medoids
+```{r}
+fviz_cluster(km,data=df)
+```
+<br>
+
+### Add the cluster number as a column
+```{r}
+final_data<-cbind(df,cluster=km$cluster)
+```
+### View the final dataset with cluster numbers
+```{r}
+head(final_data)
+```

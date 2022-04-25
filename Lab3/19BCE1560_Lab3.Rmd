@@ -1,0 +1,50 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Time Series 2
+<hr/>
+### Setting the working directory and import libraries
+
+```{r}
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab3")
+
+library(forecast)
+library(tseries)
+```
+### Read data set and convert it into a time series
+```{r}
+data=read.csv("soya_oil data set for TS forecast.csv")
+
+class(data)
+data=ts(data$Dollar,start=1,end=128,frequency=4)
+class(data)
+```
+### Plot the data
+```{r}
+plot(data)
+acf(data)
+pacf(data)
+```
+
+### Perform ARIMA test
+```{r}
+adf.test(data)
+
+ARIMAfit=auto.arima(data,ic="aic",trace=TRUE)
+summary(ARIMAfit)
+
+fc=forecast(ARIMAfit,level=c(95),h=10*4)
+plot(fc)
+summary(fc)
+attributes(fc)
+```

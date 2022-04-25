@@ -1,0 +1,74 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Time Series 1
+<hr/>
+### Setting the working directory and import libraries
+
+```{r}
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab2")
+
+library(forecast)
+library(tseries)
+```
+### Read data set and convert it into a time series
+```{r}
+data=read.csv("Tractor-Sales.csv")
+
+class(data)
+data=ts(data$Number.of.Tractor.Sold,start=c(2003,1),frequency=12)
+class(data)
+```
+### Plot the data
+```{r}
+plot(data,xlab='Years',ylab='Tractor Sales')
+```
+<br>
+
+### Plot the differenced data
+```{r}
+plot(diff(data),ylab='Differenced Tractor Sales')
+```
+<br>
+
+### Plot the log of the data to the base 10
+```{r}
+ld<-log10(data)
+plot(ld,ylab='Log (Tractor Sales)')
+```
+<br> 
+
+### Plot the differentiation of log base 10 of the data
+```{r}
+dld<-diff(ld)
+plot(dld,ylab='Differenced Log (Tractor Sales)')
+```
+<br>
+
+### Perform ARIMA test
+```{r}
+adf.test(dld)
+
+par(mfrow=c(1,2)) #to analyze multiple graphs in a single windows
+
+acf(ts(dld),main='ACF Tractor Sales')
+pacf(ts(dld),main='PACF Tractor sales')
+
+ARIMAfit=auto.arima(dld,ic="aic",trace=TRUE)
+summary(ARIMAfit)
+
+fc=forecast(ARIMAfit,level=c(95),h=3*12)
+plot(fc)
+summary(fc)
+attributes(fc)
+```

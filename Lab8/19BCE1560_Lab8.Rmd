@@ -1,0 +1,69 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab8"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Gradient Descent
+<hr/>
+### The function, learning rate and initial values:
+
+Function: 3x^2+2x+1
+Alpha: 0.01 initial_x=0.1
+
+```{r}
+rm(list=ls())
+```
+### Create a sequence of elements in a Vector
+```{r}
+#to generate sequences when plotting the axes of figures or simulating data. 
+
+xs <- seq(-2,2,len=20) 
+xs
+```
+### Define the function we want to optimize
+```{r}
+f <-  function(x) { 3* x^2 +2*x+1}
+
+# plot the function 
+plot(xs , f (xs), type="l",xlab="x",ylab=expression(3(x)^2+2(x)+1))
+```
+<br>
+
+### Calculate the gradient df/dx
+```{r}
+grad <- function(x){
+  6*x+2
+}
+```
+
+The actual solution we will approximate with gradient descent is  x = -0.33 as depicted in the plot below gradient descent implementation
+```{r}
+x <- 0.1 # initialize the first guess for x-value
+xtrace <- x  # store x -values for graphing purposes (initial)
+ftrace <- f(x) # store y-values (function evaluated at x) for graphing purposes (initial)
+
+stepFactor <- 0.01 # learning rate 'alpha'
+
+for (step in 1:5000) {
+  x <- x - stepFactor*grad(x) # gradient descent update
+  xtrace <- c(xtrace,x) # update for graph
+  ftrace <- c(ftrace,f(x)) # update for graph
+}
+
+plot(xs , f (xs), type="l",xlab="x",ylab=expression(3(x)^2+2(x)+1))
+lines(xtrace , ftrace , type="b",col="blue") # type=b (both points & lines)
+text (0,10, "Gradient Descent",col="red",pos= 4)
+
+# print final value of x
+print(x) # x converges to -0.33
+text(0,5,"x=-0.33",col="red",pos=1)
+text(0,5,"(Global minimum)",col="red",pos=3)
+```

@@ -1,0 +1,59 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab6"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## K-Means Clustering
+<hr/>
+### Setting the working directory and importing library needed
+
+```{r}
+rm(list=ls())
+
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab6")
+
+library(factoextra)
+library(cluster)
+```
+### Load and scale data
+```{r}
+df <- read.csv("seeds_K Means.csv")
+df<-na.omit(df)
+df<-scale(df) #this is to normalize the values in data because the range of values is not distributed evenly
+head(df)
+```
+### Determine the optimal number of K
+```{r}
+fviz_nbclust(df,kmeans,method="wss")
+```
+<br>
+
+### Perform K-Means clustering
+```{r}
+set.seed(1) #to reproduce same results always
+km <- kmeans(df,centers = 4,nstart = 25)
+
+km
+```
+### View the clusters formed with k-means
+```{r}
+fviz_cluster(km,data=df)
+```
+<br>
+
+### Add the cluster number as a column
+```{r}
+final_data<-cbind(df,cluster=km$cluster)
+```
+### View the final dataset with cluster numbers
+```{r}
+head(final_data)
+```

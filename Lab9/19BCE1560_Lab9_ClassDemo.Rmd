@@ -1,0 +1,46 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab9"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Hierarchical Clustering
+<hr/>
+
+
+```{r}
+rm(list=ls())
+#install.packages("factoextra")
+#install.packages("cluster")
+library(factoextra)
+library(cluster)
+```
+### Load and prepare data
+```{r}
+#to generate sequences when plotting the axes of figures or simulating data. 
+df <- USArrests  
+df <- na.omit(df)
+head(df) 
+df <- scale(df) # scaling to normalize the values >>>> x-xbar/SD
+head(df)
+
+```
+### Hierarchical clustering with complete linkage
+```{r}
+dist_mat <- dist(df, method = 'euclidean')
+hclust_complete <- hclust(dist_mat, method = 'complete')
+plot(hclust_complete,cex=0.5, hang = -1) 
+# hang = A negative value will cause the labels to hang down from 0.
+# cex= font size 
+cut<- cutree(hclust_complete, k = 4)
+abline(h =4 , col = 'red')
+rect.hclust(hclust_complete , k = 4, border = 2:5)
+
+```

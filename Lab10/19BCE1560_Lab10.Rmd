@@ -1,0 +1,72 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+
+### 19BCE1560
+
+<br>
+
+## Random Forest
+
+<hr/>
+
+```{r}
+rm(list=ls())
+#install.packages("stats19")
+#install.packages("dplyr")
+#install.packages("randomForest")
+library('stats19')
+library('dplyr')
+library('randomForest')
+```
+
+### Load and prepare data
+
+```{r}
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab10")
+
+mydata <- read.csv("admission.csv")
+mydata$admit <- as.factor(mydata$admit)
+```
+
+### Splitting trainng and testing data
+
+```{r}
+index=sample(2,nrow(mydata), replace=TRUE,prob=c(0.7,0.3))
+training=mydata[index==1,]
+testing=mydata[index==2,]
+index
+```
+
+### Create a random forest to oredict Species from other attributes
+
+```{r}
+RFM <- randomForest(admit ~ .,data=training, importance=T, proximity=T)
+```
+
+### Predict the test vales
+
+```{r}
+admit_Pred=predict(RFM,testing)
+testing$admit_Pred=admit_Pred
+View(testing)
+testing
+```
+
+### View the actual values and predicted values in a confusion matrix
+
+```{r}
+CFM=table(testing$admit,testing$admit_Pred)
+CFM
+```
+### Accuracy
+```{r}
+sum(diag(CFM))/sum(CFM)
+```

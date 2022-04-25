@@ -1,0 +1,63 @@
+---
+title: "CSE3506 Essentials of Data Analytics - Lab1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### S Shyam Sundaram
+### 19BCE1560
+<br>
+
+## Linear Regression 
+<hr/>
+### Setting the working directory
+
+```{r}
+setwd("C:/Files/Academics/VIT/Lab/EDA/19BCE1560/Lab1")
+```
+
+### Create a data frame
+
+```{r}
+x<-c(200,500,700,1000)
+y<-c(0.25,0.5,0.8,1.5)
+
+data_set=data.frame(x,y)
+data_set
+```
+
+### View the datasate and its structure
+
+```{r}
+View(data_set)
+
+str(data_set)
+```
+
+### Plot the data points
+
+```{r}
+plot(x,y)
+```
+
+### Fitting a linear regression model
+
+```{r}
+plot(x,y)
+LR_result<-lm(y~x)
+LR_result
+summary(LR_result)
+abline(LR_result,col="blue")
+```
+
+### Performing some predictions
+
+```{r}
+x=data.frame(x=c(1200))
+R<-predict(LR_result,x)
+R
+summary(R)
+```
